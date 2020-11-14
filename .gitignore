@@ -1,0 +1,9 @@
+# IDE s and editors
+*/.idea
+server/__pycache__/
+server/model/__pycache__/
+.vscode
+
+/node_modules
+/.pnp
+.pnp.js
