@@ -62,13 +62,23 @@ app.use(
 //end body-parser configuration
 
 //create app server
-var port1 = process.env.PORT || 8000;
-var server = app.listen(port1, "127.0.0.1", function () {
+var port = process.env.PORT || 8000;
+var server =http.Server(app);
+app.use(express.static('client'));
+server.listen(port, function(){
+  console.log('Runnig app');
+  console.log(port);
+  
+})
+/*
+var server = app.listen(port1, function () {
   var host = server.address().address;
   var port = server.address().port;
 
   console.log("Api server listening at http://%s:%s", host, port);
 });
+*/
+
 
 //rest api to get all customers
 app.get("/pedido", function (req, res) {
