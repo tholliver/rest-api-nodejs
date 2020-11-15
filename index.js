@@ -13,7 +13,6 @@ var connection = mysql.createConnection({
 });
 */
 
-
 //end mysql connection
 
 var db_config = {
@@ -63,7 +62,8 @@ app.use(
 //end body-parser configuration
 
 //create app server
-var server = app.listen(3000, "127.0.0.1", function () {
+var port1 = process.env.PORT || 8000;
+var server = app.listen(port1, "127.0.0.1", function () {
   var host = server.address().address;
   var port = server.address().port;
 
