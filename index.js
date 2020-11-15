@@ -3,17 +3,7 @@ var express = require("express");
 var app = express();
 var mysql = require("mysql");
 var bodyParser = require("body-parser");
-/*
-//start mysql connection
-var connection = mysql.createConnection({
-  host     : 'bpxswzqwuifl3kr6kmvs-mysql.services.clever-cloud.com', 
-  user     : 'uyiwk6c2x0ro5pzh', 
-  password : 'M5eeq0ubvKc4w7dGz9sA', 
-  database : 'bpxswzqwuifl3kr6kmvs' 
-});
-*/
 
-//end mysql connection
 
 var db_config = {
   host: "bpxswzqwuifl3kr6kmvs-mysql.services.clever-cloud.com",
@@ -51,6 +41,13 @@ function handleDisconnect() {
 
 handleDisconnect();
 
+
+app.use(function(req,res,next){
+  res.header("");
+  res.header("Access-Control-Allow-Origin","*");
+  res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 //start body-parser configuration
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(
@@ -70,23 +67,22 @@ server.listen(port, function(){
   console.log(port);
   
 })
-/*
-var server = app.listen(port1, function () {
-  var host = server.address().address;
-  var port = server.address().port;
 
-  console.log("Api server listening at http://%s:%s", host, port);
+app.get("/", function (req, res) {
+  
+    res.end(JSON.stringify({"message":'Booom you are here '}));
+
 });
-*/
 
-
-//rest api to get all customers
+//rest api to get all pedidos
 app.get("/pedido", function (req, res) {
   connection.query("select * from pedido", function (error, results, fields) {
     if (error) throw error;
     res.end(JSON.stringify(results));
   });
 });
+
+
 //rest api to get a single pedido data
 app.get("/pedido/:id", function (req, res) {
   connection.query(
