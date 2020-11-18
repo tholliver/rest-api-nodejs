@@ -37,12 +37,11 @@ function handleDisconnect() {
     }
   });
 }
-
 handleDisconnect();
-
 app.use(function (req, res, next) {
   res.header("");
   res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'POST');
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -58,6 +57,7 @@ app.use(
   })
 );
 //end body-parser configuration
+
 
 //create app server
 var port = process.env.PORT || 8000;
@@ -106,7 +106,7 @@ app.post("/pedido", function (req, res) {
     res.end(JSON.stringify(results));
   });
 });
-
+//multiple inserts on pedidosProductos Items 
 app.post("/pedido/items", function (req, res) {
   connection.query("select max(idpedido) as masa from pedido;", function (
     err,
@@ -114,7 +114,7 @@ app.post("/pedido/items", function (req, res) {
     fields
   ) {
     if (err) throw err;
-    console.log(result);
+    console.log(result[0].masa);
     console.log(req.body);
     if (result.length > 0) {
       var sql =
