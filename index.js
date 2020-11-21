@@ -81,6 +81,24 @@ app.get("/pedido", function (req, res) {
   });
 });
 
+//consulta agregada 1
+app.get("/pedidousuario", function (req, res) {
+  connection.query("SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar FROM pedido, cliente  where pedido.idclienteP = cliente.idcliente", function (error, results, fields) {
+    if (error) throw error;
+    res.end(JSON.stringify(results));
+  });
+});
+
+
+//consulta agregada 2
+app.get("/productopedido", function (req, res) {
+  connection.query("SELECT pedido_idpedido, nombre , cantidadComp, precio FROM pedidoProductos, producto where pedidoProductos.producto_idproducto = producto.idproducto", function (error, results, fields) {
+    if (error) throw error;
+    res.end(JSON.stringify(results));
+  });
+});
+
+
 //rest api to get a single pedido data
 app.get("/pedido/:id", function (req, res) {
   connection.query(
