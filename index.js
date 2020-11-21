@@ -93,6 +93,18 @@ app.get("/pedido/:id", function (req, res) {
   );
 });
 
+//rest api to get all productos
+app.get("/productos", function (req, res) {
+  connection.query(
+    "select * from producto",
+    [req.params.id],
+    function (error, results, fields) {
+      if (error) throw error;
+      res.end(JSON.stringify(results));
+    }
+  );
+});
+
 //rest api to create a new pedido record into mysql database
 app.post("/pedido", function (req, res) {
   var params = req.body;
@@ -114,18 +126,18 @@ app.post("/pedido/items", function (req, res) {
     fields
   ) {
     if (err) throw err;
-    console.log(result[0].masa);
+    console.log(result[0].masa,"The last insert id in pedido");
     console.log(req.body);
     if (result.length > 0) {
       var sql =
-        "INSERT INTO pedidoProductos (pedido_idpedido, producto_idproducto) VALUES ?";
+        "INSERT INTO pedidoProductos (pedido_idpedido, producto_idproducto, cantidadComp) VALUES ?";
       var values = [];
       for (var i = 0; i < req.body.length; i++) {
-        values.push([result[0].masa, req.body[i].producto_idproducto]);
+        values.push([result[0].masa, req.body[i].producto_idproducto, req.body[i].cantidadComp]);
       }
       connection.query(sql, [values], function (err, result) {
         if (err) throw err;
-        console.log(" Number of records inserted: " + result.affectedRows);
+        console.log(" Number of records inserted on pedidosProductos: " + result.affectedRows);
         res.end(JSON.stringify(result));
       });
     } else {
