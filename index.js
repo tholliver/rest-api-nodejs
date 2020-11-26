@@ -81,6 +81,14 @@ app.get("/pedido", function (req, res) {
   });
 });
 
+app.get("/productopedido/:id", function (req, res) {
+  connection.query("select * from pedidoProductos where pedido_idpedido=?",[req.params.id], function (error, results, fields) {
+    if (error) throw error;
+    res.end(JSON.stringify(results));
+  });
+});
+
+
 //consulta agregada 1
 app.get("/pedidousuario", function (req, res) {
   connection.query("SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar FROM pedido, cliente  where pedido.idclienteP = cliente.idcliente", function (error, results, fields) {
