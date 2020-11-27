@@ -70,7 +70,7 @@ server.listen(port, function () {
 });
 
 app.get("/", function (req, res) {
-  res.end(JSON.stringify({ message: "Booom you are here " }));
+  res.end(JSON.stringify({ message: "Bienvenido a la API de AlfaSoft" }));
 });
 
 //rest api to get all pedidos
@@ -187,15 +187,16 @@ app.post("/pedido", function (req, res) {
 });
 
 //rest api to update record into mysql database
+
 app.put("/pedido", function (req, res) {
   connection.query(
-    "UPDATE `pedido` SET `Name`=?,`Address`=?,`Country`=?,`Phone`=? where `idpedido`=?",
+    "UPDATE `pedido` SET `direccion`=?,`fechaPedido`=?,`cantidadTotal`=?,`totalPagar`=?,`idclienteP`=? where `idpedido`=?",
     [
-      req.body.Name,
-      req.body.Address,
-      req.body.Country,
-      req.body.Phone,
-      req.body.Id,
+      req.body.direccion,
+      req.body.fechaPedido,
+      req.body.cantidadTotal,
+      req.body.totalPagar,
+      req.body.idclienteP,
     ],
     function (error, results, fields) {
       if (error) throw error;
@@ -203,6 +204,7 @@ app.put("/pedido", function (req, res) {
     }
   );
 });
+
 
 //rest api to delete record from mysql database
 app.delete("/pedido", function (req, res) {
