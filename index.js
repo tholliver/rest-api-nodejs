@@ -106,6 +106,65 @@ app.get("/productopedido", function (req, res) {
   });
 });
 
+async function firstFunction(values){
+  console.log('En la funcion 1',values)
+    var someMessage;
+  connection.query("INSERT INTO cliente(idcliente, nombre, username, password) VALUES ?", [values], function(err, result) {
+    if (err) throw err;
+    console.log("Inserted users: " + result.affectedRows);
+    someMessage = JSON.stringify(result);
+  });
+  return someMessage;
+};
+
+async function secondFunction(data){
+  await firstFunction(data);
+  // now wait for firstFunction to finish...
+  // do something else
+};
+
+//New user
+//Firts check if user exits 
+//then if dont 
+app.post("/pedidito", function (req, res){
+  var dataFilds = req.body;
+  var carnet= req.body.idclienteP;
+  let maxxx=[{"idcliente":carnet}];
+  
+  console.log('The pedido data',dataFilds);
+  console.log('Aqui el carnet',carnet);
+  connection.query("select idcliente as masa from cliente where idcliente=?;", maxxx,function (
+    err,
+    result,
+    fields
+  ){
+    if (err) throw err;
+    //console.log(result[0].masa,"");
+    
+    if (result.length > 0) {
+      console.log("User Found");
+      
+      var sql = "INSERT INTO pedido(idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, idclienteP) VALUES ?";
+      
+      
+      connection.query(sql, [dataFilds], function(err, result) {
+        if (err) throw err;
+        console.log(" Number of records inserted on pedidosProductos: " + result.affectedRows);
+        res.end(JSON.stringify(result));
+      });
+    } else {
+      console.log("User not Found");
+      secondFunction(dataFilds);
+      var sql = "INSERT INTO pedido(idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, idclienteP) VALUES ?";
+      
+      connection.query(sql, [dataFilds], function(err, result) {
+        if (err) throw err;
+        console.log(" Number of records inserted on pedidosProductos: " + result.affectedRows);
+        res.end(JSON.stringify(result));
+      });
+    }
+  });
+});
 
 //rest api to get a single pedido data
 app.get("/pedido/:id", function (req, res) {
@@ -204,7 +263,6 @@ app.put("/pedido", function (req, res) {
     }
   );
 });
-
 
 //rest api to delete record from mysql database
 app.delete("/pedido", function (req, res) {
