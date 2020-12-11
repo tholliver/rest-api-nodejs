@@ -315,15 +315,17 @@ app.post("/pedido", function (req, res) {
 */
 //rest api to update record into mysql database
 
-app.put("/pedido", function (req, res) {
+app.put("/pedidos", function (req, res) {
   connection.query(
-    "UPDATE `pedido` SET `direccion`=?,`fechaPedido`=?,`cantidadTotal`=?,`totalPagar`=?,`idclienteP`=? where `idpedido`=?",
+    "UPDATE `pedido` SET `direccion`=?,`fechaPedido`=?,`cantidadTotal`=?,`totalPagar`=?,`idclienteP`=?,`estado`=? where `idpedido`=?",
     [
       req.body.direccion,
       req.body.fechaPedido,
       req.body.cantidadTotal,
       req.body.totalPagar,
       req.body.idclienteP,
+      req.body.estado,
+      req.body.idpedido
     ],
     function (error, results, fields) {
       if (error) throw error;
