@@ -83,6 +83,7 @@ app.get("/pedido", function (req, res) {
   });
 });
 
+/*
 app.get("/productopedido/:id", function (req, res) {
   connection.query(
     "select * from pedidoProductos where pedido_idpedido=?",
@@ -93,6 +94,8 @@ app.get("/productopedido/:id", function (req, res) {
     }
   );
 });
+
+*/
 
 //consulta agregada 1
 app.get("/pedidousuario", function (req, res) {
@@ -105,10 +108,31 @@ app.get("/pedidousuario", function (req, res) {
   );
 });
 
+//consulta agregada 1 con Parametro
+app.get("/pedidousuario/:id", function (req, res) {
+  connection.query(
+    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar FROM pedido, cliente where pedido.idclienteP = cliente.idcliente and  pedido.idclienteP=?",[req.params.id],
+    function (error, results, fields) {
+      if (error) throw error;
+      res.end(JSON.stringify(results));
+    }
+  );
+});
+
 //consulta agregada 2
 app.get("/productopedido", function (req, res) {
   connection.query(
     "SELECT pedido_idpedido, nombre , cantidadComp, precio FROM pedidoProductos, producto where pedidoProductos.producto_idproducto = producto.idproducto",
+    function (error, results, fields) {
+      if (error) throw error;
+      res.end(JSON.stringify(results));
+    }
+  );
+});
+//consulta 2 con parametro de idpedido 
+app.get("/productopedido/:id", function (req, res) {
+  connection.query(
+    "SELECT pedido_idpedido, nombre , cantidadComp, precio FROM pedidoProductos, producto where pedidoProductos.producto_idproducto = producto.idproducto and pedido_idpedido=?",[req.params.id],
     function (error, results, fields) {
       if (error) throw error;
       res.end(JSON.stringify(results));
@@ -140,7 +164,7 @@ async function secondFunction(data) {
 //New user
 //Firts check if user exits
 //then if dont
-app.post("/pedidito", function (req, res) {
+app.post("/pedido", function (req, res) {
   var dataFilds = req.body;
   var carnet = req.body.idclienteP.ci;
   var direccion = req.body.direccion;
@@ -150,13 +174,14 @@ app.post("/pedidito", function (req, res) {
 
   var nameFull = req.body.idclienteP.nombreFull;
 
-  let maxxx = [{ idcliente: carnet }];
+
   const newPedido={
     "direccion":direccion,
     "fechaPedido":fechaPedido,
     "cantidadTotal":cantidadTotal,
     "totalPagar":totalPagar,
-    "idclienteP":carnet
+    "idclienteP":carnet,
+    "estado":"Pendiente"
     };
   connection.query(
     "select idcliente as masa from cliente where idcliente=?;",
@@ -273,7 +298,7 @@ app.post("/pedido/items", function (req, res) {
     }
   );
 });
-
+/*
 //rest api to create a enbed sql inserts
 app.post("/pedido", function (req, res) {
   var params = req.body;
@@ -287,7 +312,7 @@ app.post("/pedido", function (req, res) {
     }
   );
 });
-
+*/
 //rest api to update record into mysql database
 
 app.put("/pedido", function (req, res) {
