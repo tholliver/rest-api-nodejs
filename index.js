@@ -100,7 +100,7 @@ app.get("/productopedido/:id", function (req, res) {
 //consulta agregada 1
 app.get("/pedidousuario", function (req, res) {
   connection.query(
-    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar FROM pedido, cliente  where pedido.idclienteP = cliente.idcliente",
+    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, estado FROM pedido, cliente  where pedido.idclienteP = cliente.idcliente",
     function (error, results, fields) {
       if (error) throw error;
       res.end(JSON.stringify(results));
@@ -111,7 +111,7 @@ app.get("/pedidousuario", function (req, res) {
 //consulta agregada 1 con Parametro
 app.get("/pedidousuario/:id", function (req, res) {
   connection.query(
-    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar FROM pedido, cliente where pedido.idclienteP = cliente.idcliente and  pedido.idclienteP=?",[req.params.id],
+    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, estado FROM pedido, cliente where pedido.idclienteP = cliente.idcliente and  pedido.idclienteP=?",[req.params.id],
     function (error, results, fields) {
       if (error) throw error;
       res.end(JSON.stringify(results));
