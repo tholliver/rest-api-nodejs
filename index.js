@@ -240,6 +240,33 @@ app.get("/pedido/:id", function (req, res) {
   );
 });
 
+//get users
+app.post("/auth", function (request, response) {
+  var username = request.body.username;
+  var password = request.body.password;
+  
+  if (username && password) {
+    connection.query(
+      "SELECT * FROM cliente WHERE username = ? AND password = ?",
+      [username, password],
+      function (error, results, fields) {
+        if (results.length > 0) {
+          //console.log("u are in bro!!!");
+          response.end(JSON.stringify(results));
+          //response.send({ message: "u are in" });
+        } else {
+          //response.send("Incorrect Username and/or Password!");
+          response.end(JSON.stringify(results));
+        }
+        response.end();
+      }
+    );
+  } else {
+    response.send("Please enter Username and Password!");
+    response.end();
+  }
+});
+
 //rest api to get all productos
 app.get("/productos", function (req, res) {
   connection.query(
