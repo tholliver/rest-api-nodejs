@@ -385,4 +385,15 @@ function (error, results, fields) {
   );
 });
 //insert pedido
-
+app.post("/pedidoIn", function (req, res) {
+  var params = req.body;
+  console.log(params);
+  connection.query("INSERT INTO pedido SET ?", params, function (
+    error,
+    results,
+    fields
+  ) {
+    if (error) throw error;
+    res.end(JSON.stringify(results));
+  });
+});
