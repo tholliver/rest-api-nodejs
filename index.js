@@ -111,7 +111,8 @@ app.get("/pedidousuario", function (req, res) {
 //consulta agregada 1 con Parametro
 app.get("/pedidousuario/:id", function (req, res) {
   connection.query(
-    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, estado FROM pedido, cliente where pedido.idclienteP = cliente.idcliente and  pedido.idclienteP=?",[req.params.id],
+    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, estado FROM pedido, cliente where pedido.idclienteP = cliente.idcliente and  pedido.idclienteP=?",
+    [req.params.id],
     function (error, results, fields) {
       if (error) throw error;
       res.end(JSON.stringify(results));
@@ -129,10 +130,11 @@ app.get("/productopedido", function (req, res) {
     }
   );
 });
-//consulta 2 con parametro de idpedido 
+//consulta 2 con parametro de idpedido
 app.get("/productopedido/:id", function (req, res) {
   connection.query(
-    "SELECT pedido_idpedido, nombre , cantidadComp, precio FROM pedidoProductos, producto where pedidoProductos.producto_idproducto = producto.idproducto and pedido_idpedido=?",[req.params.id],
+    "SELECT pedido_idpedido, nombre , cantidadComp, precio FROM pedidoProductos, producto where pedidoProductos.producto_idproducto = producto.idproducto and pedido_idpedido=?",
+    [req.params.id],
     function (error, results, fields) {
       if (error) throw error;
       res.end(JSON.stringify(results));
@@ -168,21 +170,20 @@ app.post("/pedido", function (req, res) {
   var dataFilds = req.body;
   var carnet = req.body.idclienteP.ci;
   var direccion = req.body.direccion;
-  var fechaPedido=req.body.fechaPedido;
+  var fechaPedido = req.body.fechaPedido;
   var totalPagar = req.body.totalPagar;
   var cantidadTotal = req.body.cantidadTotal;
 
   var nameFull = req.body.idclienteP.nombreFull;
 
-
-  const newPedido={
-    "direccion":direccion,
-    "fechaPedido":fechaPedido,
-    "cantidadTotal":cantidadTotal,
-    "totalPagar":totalPagar,
-    "idclienteP":carnet,
-    "estado":"Pendiente"
-    };
+  const newPedido = {
+    direccion: direccion,
+    fechaPedido: fechaPedido,
+    cantidadTotal: cantidadTotal,
+    totalPagar: totalPagar,
+    idclienteP: carnet,
+    estado: "Pendiente",
+  };
   connection.query(
     "select idcliente as masa from cliente where idcliente=?;",
     carnet,
@@ -198,8 +199,7 @@ app.post("/pedido", function (req, res) {
         connection.query(sql, [newPedido], function (err, result) {
           if (err) throw err;
           console.log(
-            " Number of records inserted on pedidos: " +
-              result.affectedRows
+            " Number of records inserted on pedidos: " + result.affectedRows
           );
           res.end(JSON.stringify(result));
         });
@@ -218,8 +218,7 @@ app.post("/pedido", function (req, res) {
         connection.query(sql, [newPedido], function (err, result) {
           if (err) throw err;
           console.log(
-            " Number of records inserted on pedidos: " +
-              result.affectedRows
+            " Number of records inserted on pedidos: " + result.affectedRows
           );
           res.end(JSON.stringify(result));
         });
@@ -244,7 +243,7 @@ app.get("/pedido/:id", function (req, res) {
 app.post("/auth", function (request, response) {
   var username = request.body.username;
   var password = request.body.password;
-  
+
   if (username && password) {
     connection.query(
       "SELECT * FROM cliente WHERE username = ? AND password = ?",
@@ -352,7 +351,7 @@ app.put("/pedidos", function (req, res) {
       req.body.totalPagar,
       req.body.idclienteP,
       req.body.estado,
-      req.body.idpedido
+      req.body.idpedido,
     ],
     function (error, results, fields) {
       if (error) throw error;
@@ -373,3 +372,17 @@ app.delete("/pedido", function (req, res) {
     }
   );
 });
+
+app.post("/estadoPedido/", function (req, res) {
+  var estado = req.body.estado;
+  var idpedido = req.body.idpedido;
+  connection.query(
+  " UPDATE pedido SET estado = ? WHERE idpedido= ?",[estado, idpedido],
+function (error, results, fields) {
+      if (error) throw error;
+      res.end(JSON.stringify(results));
+    }
+  );
+});
+//insert pedido
+
