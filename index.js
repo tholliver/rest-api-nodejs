@@ -101,7 +101,7 @@ app.get("/productopedido/:id", function (req, res) {
 //consulta agregada 1 sorted by idpedido
 app.get("/pedidousuario", function (req, res) {
   connection.query(
-    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, estado FROM pedido, cliente  where pedido.idclienteP = cliente.idcliente order by idpedido desc",
+    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, estado, estadoPago FROM pedido, cliente  where pedido.idclienteP = cliente.idcliente order by idpedido desc",
     function (error, results, fields) {
       if (error) throw error;
       res.end(JSON.stringify(results));
@@ -112,7 +112,7 @@ app.get("/pedidousuario", function (req, res) {
 //consulta agregada 1 con Parametro
 app.get("/pedidousuario/:id", function (req, res) {
   connection.query(
-    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, estado FROM pedido, cliente where pedido.idclienteP = cliente.idcliente and  pedido.idclienteP=? order by idpedido desc",
+    "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, estado, estadoPago FROM pedido, cliente where pedido.idclienteP = cliente.idcliente and  pedido.idclienteP=? order by idpedido desc",
     [req.params.id],
     function (error, results, fields) {
       if (error) throw error;
@@ -142,6 +142,8 @@ app.get("/productopedido/:id", function (req, res) {
     }
   );
 });
+
+
 
 async function firstFunction(values) {
   console.log("En la funcion 1", values);
@@ -344,7 +346,7 @@ app.post("/pedido", function (req, res) {
 
 app.put("/pedidos", function (req, res) {
   connection.query(
-    "UPDATE `pedido` SET `direccion`=?,`fechaPedido`=?,`cantidadTotal`=?,`totalPagar`=?,`idclienteP`=?,`estado`=? where `idpedido`=?",
+    "UPDATE `pedido` SET `direccion`=?,`fechaPedido`=?,`cantidadTotal`=?,`totalPagar`=?,`idclienteP`=?,`estado`=?, `estadoPago`=? where `idpedido`=?",
     [
       req.body.direccion,
       req.body.fechaPedido,
