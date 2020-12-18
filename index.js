@@ -98,7 +98,7 @@ app.get("/productopedido/:id", function (req, res) {
 
 */
 
-//consulta agregada 1
+//consulta agregada 1 sorted by idpedido
 app.get("/pedidousuario", function (req, res) {
   connection.query(
     "SELECT idcliente, nombre as nombreCli ,idpedido, direccion, fechaPedido, cantidadTotal, totalPagar, estado FROM pedido, cliente  where pedido.idclienteP = cliente.idcliente order by idpedido desc",
