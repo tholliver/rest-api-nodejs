@@ -228,7 +228,7 @@ app.post("/pedido", function (req, res) {
   );
 });
 
-//rest api to get a single pedido data
+//rest api to get a single pedido data Sorted on idpedido
 app.get("/pedido/:id", function (req, res) {
   connection.query(
     "select * from pedido where idpedido=? order by idpedido desc",
