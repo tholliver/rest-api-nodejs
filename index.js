@@ -83,6 +83,7 @@ app.get("/pedido", function (req, res) {
   });
 });
 
+
 /*
 app.get("/productopedido/:id", function (req, res) {
   connection.query(
